@@ -1,0 +1,127 @@
+import 'package:flutter/material.dart';
+import 'package:s5_class_zync/institution.dart';
+import 'package:s5_class_zync/person.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // Institution tecsup = Institution(
+  //   name: "Tecsup",
+  //   people: [],
+  // );
+
+  List<Institution> institutions = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text("My Classes"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Institution data = Institution(
+                name: "UNSA",
+                people: [],
+              );
+              institutions.add(data);
+              setState(() {});
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      body: Column(
+        children: institutions
+            .map(
+              (institution) => Column(
+            children: <Widget>[
+              Text(
+                "${institution.name} (${institution.people.length})",
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  institution.people.add(
+                    Person(
+                      name: "Luis",
+                      address: "Av. Lima 123",
+                      phone: "12121212",
+                    ),
+                  );
+                  setState(() {});
+                },
+                child: const Text("Agregar persona"),
+              ),
+              ...institution.people
+                  .map(
+                    (e) => ListTile(
+                  leading: CircleAvatar(
+                    child: Text(e.name[0]),
+                  ),
+                  title: Text(e.name),
+                  subtitle: Text("${e.address} | ${e.phone}"),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          e.name = "Daniel";
+                          e.address = "Av. Arequipa  123";
+                          e.phone = "999000999";
+
+                          // e = Person(
+                          //     name: "Juan",
+                          //     address: "Av. Cayma 123",
+                          //     phone: "22344232");
+
+                          print(e.name);
+
+                          setState(() {});
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          // tecsup.people.removeLast(); // Eliminar el último elemento
+                          // tecsup.people.removeRange(0, 3); // Eliminar por rango
+                          // tecsup.people.removeAt(1);
+                          institution.people.remove(e);
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              )
+                  .toList(),
+            ],
+          ),
+        )
+            .toList(),
+      ),
+    );
+  }
+}
+
